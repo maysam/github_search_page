@@ -16,6 +16,8 @@ class GithubController < ApplicationController
         # message: "Only the first 1000 search results are available",
         (i-@page).abs < 3 || i <= 3 || i + 3 > @max_available_pages
       }
+      @prev = [@page - 1 , 1].max
+      @next = [@page + 1 , @max_available_pages].min
     end
   end
 end
