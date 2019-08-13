@@ -4,7 +4,7 @@ class GithubController < ApplicationController
   def search
     if @query = params[:q]
       @per_page = 20
-      @page = params[:page].to_i || 1
+      @page = params[:page] ? params[:page].to_i : 1
 
       @url = "https://api.github.com/search/repositories?q=#{@query}&per_page=#{@per_page}&page=#{@page}"
       Rails.logger.info "url = #{@url}"
