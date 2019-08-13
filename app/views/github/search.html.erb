@@ -1,4 +1,5 @@
 <h1>Github Public Search</h1>
+
 <%= form_tag("/", method: "get") do %>
   <%= label_tag(:q, "Search for:") %>
   <%= text_field_tag(:q, params[:q]) %>
@@ -6,8 +7,52 @@
 <% end %>
 <% if @response %>
   Total: <%= @response['total_count'] %>
-  <% @response['items'].each { |item| %>
-  url: <%= item['html_url'] %>
   <br />
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+      <th scope="col">Created At</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @response['items'].each { |item| %>
+    <tr>
+      <th scope="row">3</th>
+      <td>
+        <a href="<%= item['html_url'] %>" target='_blank'>
+          <nobr><%= item['full_name'] %></nobr>
+        </a>
+      </td>
+      <td><%= item['description'] %></td>
+      <td><nobr><%= Date.parse item['created_at'] %></nobr></td>
+    </tr>
   <%  } %>
+  </tbody>
+</table>
+
+<% if @response['total_count'] > @per_page %>
+<center>
+<nav aria-label="Page navigation">
+  <ul class="pagination">
+    <li class="page-item"><a class="page-link" href="?">Previous</a></li>
+    <%
+    prev = 0
+    @pagination_pages.each do |page|    %>
+     <% if prev + 1 != page %>
+    <li class="page-item"><a>...</a></li>
+     <% end %>
+    <li class="page-item"><a class="page-link" href="?q=<%=@query%>&per_page=<%=@per_page%>&page=<%=page%>"><%= page %></a></li>
+    <%
+    prev = page
+    end %>
+    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+  </ul>
+</nav>
+</center>
+<% end %>
+
 <% end %>
